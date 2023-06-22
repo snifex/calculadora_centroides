@@ -6,42 +6,37 @@ from decimal import *
 
 def main():
     # Create the menu
-    menu = ConsoleMenu("Menu de calculo", "Selecciona la figura")
+    menu = ConsoleMenu("Menú de calculo", "Selecciona la figura")
 
-    #Creamos los items del menú
-    circular_forms_items = SelectionMenu(["Semi-elipse","Cuarto de elipse", "Parabola", "Ejuta/Acartelamiento"])
-    
-    semi_elipse_item = FunctionItem("Ingresa los datos por orden (eje y, lado a, lado): ", eliptical_forms, ["prompt.input"])
+    #Creamos el menú de elipticas
+    submenu_internal_elipses = ConsoleMenu("Formas elipsicas", "Selecciona una forma")
 
-    circular_menu = SubmenuItem("Formas circulares",circular_forms_items, menu)
+    semi_elipse_item = FunctionItem("Semi-elipse", input_handler)
+    quarter_elipse_item = FunctionItem("Cuarto de elipse", input_handler)
+    parable_item = FunctionItem("Parabola", input_handler)
+    ejuta_item = FunctionItem("Ejuta", input_handler)
 
-    prueba_item  = FunctionItem("Prueba texto", input_handler)
+    submenu_internal_elipses.append_item(semi_elipse_item)
+    submenu_internal_elipses.append_item(quarter_elipse_item)
+    submenu_internal_elipses.append_item(parable_item)
+    submenu_internal_elipses.append_item(ejuta_item)
 
-    # A CommandItem runs a console command
-    command_item = CommandItem("Run a console command",  "dir")
+    #Ya creado el menú hacemos una instancia de la que ira al menú principal
+    submenu_principal_elipses = SubmenuItem("Formas circulares", submenu=submenu_internal_elipses)
 
-    # A SelectionMenu constructs a menu from a list of strings
-    selection_menu = SelectionMenu(["item1", "item2", "item3"])
-
-    # A SubmenuItem lets you add a menu (the selection_menu above, for example)
-    # as a submenu of another menu
-    submenu_item = SubmenuItem("Submenu item", selection_menu, menu)
-
-    # Once we're done creating them, we just add the items to the menu}
-    menu.append_item(circular_menu)
-    menu.append_item(prueba_item)
-    menu.append_item(semi_elipse_item)
+    #Agregamos al menú principal los menús creados
+    menu.append_item(submenu_principal_elipses)
 
 
-    # Finally, we call show to show the menu and allow the user to interact
+    # Mostramos el menú
     menu.show()
 
 def eliptical_forms(x: Decimal, y: Decimal, area: Decimal):
-    pass    
+    pass
 
 def input_handler():
     pu = PromptUtils(Screen())
-    result = pu.input("Ingresa los siguientes valores: 1,2,3")
+    result = pu.input("Ingresa los valores (y)")
     pu.println("Pusiste esto ei: ",result,"Ei: es de tipo ",type(result))
     pu.enter_to_continue()
 

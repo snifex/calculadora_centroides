@@ -14,7 +14,7 @@ def main():
     menu = ConsoleMenu("Menú de calculo", "Selecciona la figura", exit_option_text="Salir del programa")
 
     #Creamos el menú de elipticas
-    submenu_add_figures = ConsoleMenu("Agrega una forma", "Selecciona el tipo de forma")
+    submenu_add_figures = ConsoleMenu("Agrega una forma", "Selecciona el tipo de forma", exit_option_text="Regresar al menú principal")
 
     rectangle_item = FunctionItem("Rectangulo",input_handler, [TipoFigura.RECTANGULO.value])
     triangle_item = FunctionItem("Triangulo",input_handler, [TipoFigura.TRIANGULO.value])
@@ -38,34 +38,28 @@ def main():
     #Ya creado el menú hacemos una instancia de la que ira al menú principal
     item_menu_add_figure = SubmenuItem("Agrega una figura", submenu=submenu_add_figures)
 
-
-    #Hacemos una lista de subemenu de cada opción
-    submenu_perks_figures = [SelectionMenu([f"Base: {i.x_lado}", f"Altura: {i.y_lado}", i.tipo_figura, f"{i.get_area()}"], exit_option_text="Regresar a ver las figuras", title=i.tipo_figura) for i in figuras_array]
-
-    submenu_figures_actual = [SubmenuItem(figure.tipo_figura,submenu = submenu_perks_figures[index]) for index,figure in enumerate(figuras_array)]
-    #Creamos un menú con las formas que hay
-    submenu_figures = ConsoleMenu("Figuras actuales")
-
-    for i in submenu_figures_actual:
-        submenu_figures.append_item(i)
-
-
     #Hacemos una opción donde nos muestre las figuras actuales
-    actual_figures = SubmenuItem("Ver las figuras actuales", submenu=submenu_figures)
+    actual_figures = FunctionItem("Ver las figuras actuales", print_actual_figures)
 
     #Agregamos al menú principal los menús creados
     menu.append_item(item_menu_add_figure)
     menu.append_item(actual_figures)
+
     # Mostramos el menú
     menu.show()
 
-#TODO: Tratar de mostrar las figuras
+def print_actual_figures() -> None:
+    global figuras_array
 
-def remove_epilogue_figures(menu):
-    menu.epilogue_text = None
+    pu = PromptUtils(Screen())
 
-def add_epilogue_figures(menu):
-    menu.epilogue_text = "No hay figuras aún"
+    if len(figuras_array) == 0:
+        pu.println("No hay figuras aún")
+    else:
+        for i in figuras_array:
+            pu.println(f"Tipo de figura: {i.tipo_figura}\n  Base: {i.x_lado}\n  Altura: {i.y_lado}\n  Area={i.get_area()}\n  Centroide= {i.get_centroide()}\n")
+
+    pu.enter_to_continue()
 
 def input_handler(tipo_figura: int):
     global figuras_array
@@ -87,11 +81,3 @@ def input_handler(tipo_figura: int):
 
 if __name__ == "__main__":
     main()
-
-
-
-
-# Primero metes una figura x
-# Seleccionas que tipo de figura 
-# Haces los calculos de los centroides
-# Calculas los 

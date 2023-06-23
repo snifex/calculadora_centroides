@@ -109,7 +109,6 @@ class Figura():
 
         return resultado_centroide
     
-    @staticmethod
     def get_area(self) -> Decimal:
         area_semi_circ = lambda x : Decimal( (Decimal(pi) * x ** Decimal(2)) / 2)
         result = Decimal(0)
